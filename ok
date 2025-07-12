@@ -1,0 +1,116 @@
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- Create ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "NoLagPetDuplicator"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+-- Main Frame
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 320, 0, 170)
+mainFrame.Position = UDim2.new(0.5, -160, 0.5, -85)
+mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+mainFrame.BackgroundTransparency = 0.2
+mainFrame.BorderSizePixel = 2
+mainFrame.Active = true
+mainFrame.Draggable = true
+mainFrame.Parent = screenGui
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 10)
+corner.Parent = mainFrame
+
+-- Header Label
+local header = Instance.new("TextLabel")
+header.Name = "Header"
+header.Size = UDim2.new(1, 0, 0, 45)
+header.Position = UDim2.new(0, 0, 0, 0)
+header.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+header.Text = "SSYNTACC X NOLAG - PET DUPLICATOR"
+header.TextColor3 = Color3.fromRGB(255, 255, 255)
+header.Font = Enum.Font.GothamBold
+header.TextSize = 17
+header.BorderSizePixel = 0
+header.Parent = mainFrame
+
+local headerCorner = Instance.new("UICorner")
+headerCorner.CornerRadius = UDim.new(0, 8)
+headerCorner.Parent = header
+
+-- "Dupe Pet" Button
+local dupeButton = Instance.new("TextButton")
+dupeButton.Name = "DupeButton"
+dupeButton.Size = UDim2.new(0.6, 0, 0, 35)
+dupeButton.Position = UDim2.new(0.2, 0, 0, 65)
+dupeButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+dupeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+dupeButton.Font = Enum.Font.GothamSemibold
+dupeButton.TextSize = 18
+dupeButton.Text = "Dupe Pet"
+dupeButton.AutoButtonColor = true
+dupeButton.BorderColor3 = Color3.fromRGB(255, 0, 0)
+dupeButton.BorderSizePixel = 2
+dupeButton.ZIndex = 2
+dupeButton.Parent = mainFrame
+
+local dupeCorner = Instance.new("UICorner")
+dupeCorner.CornerRadius = UDim.new(0, 6)
+dupeCorner.Parent = dupeButton
+
+-- RGB Outline Script for main frame
+task.spawn(function()
+    local hue = 0
+    while true do
+        hue = (hue + 0.002) % 1
+        mainFrame.BorderColor3 = Color3.fromHSV(hue, 1, 1)
+        task.wait(0.01)
+    end
+end)
+
+-- Function: Visually duplicate the currently equipped tool or the first tool in Backpack
+local function dupeToolInBackpack()
+    local char = player.Character or player.CharacterAdded:Wait()
+    if not char then 
+        warn("Character not found.")
+        return 
+    end
+    
+    local backpack = player:WaitForChild("Backpack")
+    
+    -- Try to find the currently equipped tool in the character's model
+    local tool = nil
+    for _, item in ipairs(char:GetChildren()) do
+        if item:IsA("Tool") then
+            tool = item
+            break
+        end
+    end
+    
+    -- If no tool equipped, try to find any tool in the backpack
+    if not tool then
+        tool = backpack:FindFirstChildWhichIsA("Tool")
+    end
+    
+    if not tool then
+        warn("No tool found to duplicate.")
+        return
+    end
+    
+    print("Found tool to duplicate: " .. tool.Name)
+    
+    -- Clone the tool and parent it to Backpack
+    local toolClone = tool:Clone()
+    toolClone.Parent = backpack
+    
+    if toolClone.Parent == backpack then
+        print("Successfully duplicated tool: " .. toolClone.Name)
+    else
+        warn("Failed to parent duplicated tool.")
+    end
+end
+
+-- Connect button click
+dupeButton.MouseButton1Click:Connect(dupeToolInBackpack)
