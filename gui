@@ -1,5 +1,4 @@
-
--- ⛏ Kuni VIP Pet Hatch GUI (Dark Theme with White Buttons)
+-- Sigma VIP Hatch
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local TweenService = game:GetService("TweenService")
@@ -30,6 +29,8 @@ local petTable = {
     ["Dinosaur Egg"] = { "Raptor", "Triceratops", "Stegosaurus", "T-Rex", "Pterodactyl", "Brontosaurus" },
     ["Primal Egg"] = { "Spinosaurus", "Ankylosaurus", "Dilophosaurus", "Parasaurolophus", "Iguanodon" },
     ["Zen Egg"] = { "Shiba Inu", "Nihonzaru", "Tanuki", "Tanchozuru", "Kappa", "Kitsune" },
+    ["Night Egg"] = { "Hedgehog", "Mole", "Frog", "Echo Frog", "Night Owl", "Raccoon" },
+
 
     -- ✅ Gourmet Egg pets based on Cooking & Trading Event Update
     ["Gourmet Egg"] = {
